@@ -1,8 +1,14 @@
+import { Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import User from "./pages/User";
+
 function App() {
   return (
     <>
-      <div>Hi there dave here</div>
-      <div>hello people</div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/user" element={<User />} />
+      </Routes>
     </>
   );
 }
