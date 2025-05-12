@@ -5,6 +5,7 @@ import { connectToDB } from "./config/db.js";
 
 // routers import
 import userRouter from "./routes/user.routes.js";
+import chatRouter from "./routes/chat.routes.js"
 
 // connect to DB
 connectToDB();
@@ -24,6 +25,8 @@ app.get("/api/users", (req, res) => {
 
 // userRouter
 app.use("/api/user", userRouter);
+// chatRouter
+app.use("/api/chat", chatRouter);
 
 app.listen(port, () => {
   console.log(`Server started at port no: ${port}🍉`);
