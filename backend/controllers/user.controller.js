@@ -57,3 +57,23 @@ export const authUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid Email or Password");
   }
 });
+
+export const allUsers = asyncHandler(async (req, res) => {
+  // creating a filter object
+  // we can search the database based on this keyword object
+  // /api/user?search=jane
+  // then the filter object(keyword) searches the name and the eamil attributes and checks whether
+  // it contains the jane word in it
+  const keyword = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+  // users contain all the users except the user who is logged in
+  // req.user is coming from the authmiddleware
+  const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+  res.send(users);
+});
