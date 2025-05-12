@@ -1,5 +1,8 @@
 import React from "react";
 import "../index.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export const SignUp = () => {
   // states -> name, email, password, confirm pass
@@ -8,9 +11,41 @@ export const SignUp = () => {
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
 
+  // redirection
+  const navigate = useNavigate();
+
   // form handler
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // send the data to the backend
+    const payload = {
+      name: name,
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword,
+    };
+
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      const { data } = await axios.post("/api/user/register", payload, config);
+
+      console.log("Data: ", data);
+
+      // backend sends the token and it is the responsibility of the frontend dev to store it
+      // here we are going with the localstorage
+      localStorage.setItem("userInfo", JSON.stringify(data));
+
+      // redirect to the chats page
+      navigate("/chats");
+    } catch (error) {
+      console.log("Some error occurred!");
+    }
   };
   return (
     <>
